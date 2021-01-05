@@ -45,7 +45,7 @@ public class UsersModel {
 				return listUsers;
 	}
 
-	public Boolean addUser(DataSource dataSource, User newUser) {
+	public void addUser(DataSource dataSource, User newUser) {
 		Connection connect = null;
 		PreparedStatement pstm = null;
 		try {
@@ -56,12 +56,31 @@ public class UsersModel {
 			pstm = connect.prepareStatement(query);
 			pstm.setString(1,username);
 			pstm.setString(2,email);
-			return pstm.execute();
+			pstm.execute();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;			
+			e.printStackTrace();			
 		}
 		
+	}
+
+	public void updateUser(DataSource dataSource, User updatedUser) {
+		Connection connect = null;
+		PreparedStatement pstm = null;
+		try {
+			connect = dataSource.getConnection();
+			int usersId=updatedUser.getUsers_id();
+			String username=updatedUser.getUsername();
+			String email=updatedUser.getEmail();
+			String query = "update users set username = ?,email = ? where users_id= ?";
+			pstm = connect.prepareStatement(query);
+			pstm.setString(1,username);
+			pstm.setString(2,email);
+			pstm.setInt(3, usersId);
+			pstm.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();			
+		}		
 	}
 }
